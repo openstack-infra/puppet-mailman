@@ -1,0 +1,11 @@
+{
+  "name": "openstackci-mailman",
+  "version": "0.0.1",
+  "author": "OpenStack CI",
+  "summary": "Puppet module for Mailman",
+  "license": "Apache 2.0",
+  "source": "git://git.openstack.org/openstack-infra/puppet-mailman.git",
+  "project_page": "http://ci.openstack.org/",
+  "issues_url": "https://storyboard.openstack.org/#!/project/795",
+  "dependencies": []
+}
