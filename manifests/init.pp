@@ -2,19 +2,19 @@
 #
 class mailman($vhost_name=$::fqdn) {
 
-  include apache
+  include ::httpd
 
   package { 'mailman':
     ensure => installed,
   }
 
-  apache::vhost { $vhost_name:
+  ::httpd::vhost { $vhost_name:
     port     => 80,
     docroot  => '/var/www/',
     priority => '50',
     template => 'mailman/mailman.vhost.erb',
   }
-  a2mod { 'rewrite':
+  httpd_mod { 'rewrite':
     ensure => present,
   }
 
@@ -25,7 +25,7 @@ class mailman($vhost_name=$::fqdn) {
     group   => 'root',
     replace => true,
     mode    => '0444',
-    require => Package[$::apache::params::apache_name],
+    require => Httpd::Vhost[$vhost_name],
   }
 
   file { '/etc/mailman/mm_cfg.py':
