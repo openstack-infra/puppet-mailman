@@ -17,6 +17,9 @@ class mailman($vhost_name=$::fqdn) {
   httpd_mod { 'rewrite':
     ensure => present,
   }
+  httpd_mod { 'cgid':
+    ensure => present,
+  }
 
   file { '/var/www/index.html':
     ensure  => present,
