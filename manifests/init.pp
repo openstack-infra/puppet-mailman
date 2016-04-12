@@ -20,6 +20,9 @@ class mailman(
   httpd_mod { 'rewrite':
     ensure => present,
   }
+  httpd_mod { 'cgid':
+    ensure => present,
+  }
 
   file { '/var/www/index.html':
     ensure  => present,
