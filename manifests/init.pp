@@ -19,9 +19,11 @@ class mailman(
   }
   httpd_mod { 'rewrite':
     ensure => present,
+    before => Service['httpd'],
   }
   httpd_mod { 'cgid':
     ensure => present,
+    before => Service['httpd'],
   }
 
   file { '/var/www/index.html':
