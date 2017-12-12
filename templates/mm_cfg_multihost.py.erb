@@ -1,0 +1,40 @@
+import os
+import sys
+
+sys.path.insert(0, os.path.join(os.environ['MAILMAN_SITE_DIR'], 'etc'))
+from mm_cfg_local import *
+
+VAR_PREFIX      = os.environ['MAILMAN_SITE_DIR']
+
+# Useful directories
+LIST_DATA_DIR   = os.path.join(VAR_PREFIX, 'lists')
+LOG_DIR         = os.path.join(VAR_PREFIX, 'logs')
+LOCK_DIR        = os.path.join(VAR_PREFIX, 'locks')
+DATA_DIR        = os.path.join(VAR_PREFIX, 'data')
+SPAM_DIR        = os.path.join(VAR_PREFIX, 'spam')
+WRAPPER_DIR     = os.path.join(EXEC_PREFIX, 'mail')
+BIN_DIR         = os.path.join(PREFIX, 'bin')
+SCRIPTS_DIR     = os.path.join(PREFIX, 'scripts')
+TEMPLATE_DIR    = os.path.join(PREFIX, 'templates')
+MESSAGES_DIR    = os.path.join(PREFIX, 'messages')
+PUBLIC_ARCHIVE_FILE_DIR  = os.path.join(VAR_PREFIX, 'archives', 'public')
+PRIVATE_ARCHIVE_FILE_DIR = os.path.join(VAR_PREFIX, 'archives', 'private')
+
+# Directories used by the qrunner subsystem
+QUEUE_DIR       = os.path.join(VAR_PREFIX, 'qfiles')
+INQUEUE_DIR     = os.path.join(QUEUE_DIR, 'in')
+OUTQUEUE_DIR    = os.path.join(QUEUE_DIR, 'out')
+CMDQUEUE_DIR    = os.path.join(QUEUE_DIR, 'commands')
+BOUNCEQUEUE_DIR = os.path.join(QUEUE_DIR, 'bounces')
+NEWSQUEUE_DIR   = os.path.join(QUEUE_DIR, 'news')
+ARCHQUEUE_DIR   = os.path.join(QUEUE_DIR, 'archive')
+SHUNTQUEUE_DIR  = os.path.join(QUEUE_DIR, 'shunt')
+VIRGINQUEUE_DIR = os.path.join(QUEUE_DIR, 'virgin')
+BADQUEUE_DIR    = os.path.join(QUEUE_DIR, 'bad')
+RETRYQUEUE_DIR  = os.path.join(QUEUE_DIR, 'retry')
+MAILDIR_DIR     = os.path.join(QUEUE_DIR, 'maildir')
+
+# Other useful files
+PIDFILE = os.path.join(VAR_PREFIX, 'run', 'mailman.pid')
+SITE_PW_FILE = os.path.join(DATA_DIR, 'adm.pw')
+LISTCREATOR_PW_FILE = os.path.join(DATA_DIR, 'creator.pw')

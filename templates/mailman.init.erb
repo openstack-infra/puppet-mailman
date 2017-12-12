@@ -1,0 +1,116 @@
+#! /bin/sh
+#
+# mailman-<%= @name %>	starts up the master queue runner for mailman
+#
+# Based on skeleton originally by Miquel van Smoorenburg and Ian Murdock,
+# customisations by Tollef Fog Heen and Thijs Kinkhorst for Debian.
+#
+### BEGIN INIT INFO
+# Provides:          mailman-qrunner-<%= @name %>
+# Required-Start:    $syslog $local_fs $remote_fs $named $network 
+# Required-Stop:     $syslog $local_fs $remote_fs $named $network
+# Should-Start:      
+# Should-Stop:       
+# Default-Start:     2 3 4 5
+# Default-Stop:
+# Short-Description: Mailman Master Queue Runner 
+# Description:       Starts and stops the Mailman queue runners, used to
+#                    manage the various message queues within the Mailman
+#                    mailing list manager.
+### END INIT INFO
+
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+DAEMON=/usr/lib/mailman/bin/mailmanctl
+MAILMAN_SITE_DIR=/srv/mailman/<%= @name %>
+PIDFILE=$MAILMAN_SITE_DIR/run/mailman.pid
+
+
+test -x $DAEMON || exit 0
+
+set -e
+
+if ! [ -d /var/run/mailman ]; then
+      install -d -o list -g list /var/run/mailman
+fi
+
+if ! [ -d /var/lock/mailman ]; then
+      install -d -o root -g list -m 2775 /var/lock/mailman
+fi
+
+. /lib/lsb/init-functions
+
+# In rare upgrading cycles python might not be available at some point.
+# Do not break the upgrade in that case.
+if ! [ -x /usr/bin/python ]; then
+	log_warning_msg "Python interpreter not available, exiting."
+	exit 0;
+fi
+
+# Just a newline.
+nl='
+'
+
+case "$1" in
+  start)
+    SITE_LIST=$( sed -rne "s/^[[:space:]]*MAILMAN_SITE_LIST[[:space:]]*=[[:space:]]*(['\"])([^'\"]+)\\1/\\2/p" /etc/mailman/mm_cfg.py )
+    [ -n "$SITE_LIST" ] || SITE_LIST='mailman'
+    case "$nl$(/var/lib/mailman/bin/list_lists -b)$nl" in
+    (*$nl$SITE_LIST$nl*) ;;
+    (*)
+        log_warning_msg "Site list for mailman missing (looking for list named '${SITE_LIST}')."
+        log_warning_msg "Please create it; until then, mailman will refuse to start."
+        exit 0 ;;
+    esac
+    log_daemon_msg "Starting Mailman master qrunner" "mailmanctl"
+    if $DAEMON -s -q start; then
+        log_end_msg 0
+    else
+        log_end_msg 1
+    fi
+    ;;
+  stop)
+    log_daemon_msg "Stopping Mailman master qrunner" "mailmanctl"
+    if $DAEMON -q stop; then
+        rm -f $PIDFILE
+        log_end_msg 0
+    else
+        log_end_msg 1
+    fi
+    ;;
+  reload)
+    log_begin_msg "Reloading Mailman master qrunner configuration"
+    if $DAEMON -q restart; then
+        log_end_msg 0
+    else
+        log_end_msg 1
+    fi
+  ;;
+  restart|force-reload)
+    PID=`cat $PIDFILE 2>/dev/null` || true
+    log_daemon_msg "Restarting Mailman master qrunner" "mailmanctl"
+    $DAEMON -q stop
+    if test -n "$PID" && kill -0 $PID 2>/dev/null ; then
+        log_action_begin_msg "Waiting"
+        for cnt in `seq 1 5`; do
+            sleep 1
+            kill -0 $PID 2>/dev/null || break
+        done;
+        if kill -0 $PID 2>/dev/null ; then
+            log_action_end_msg 1
+        else
+            log_action_end_msg 0
+        fi
+    fi
+    if $DAEMON -q start; then
+        log_end_msg 0
+    else
+        log_end_msg 1
+    fi
+    ;;
+  *)
+    echo "Usage: /etc/init.d/mailman {start|stop|restart|reload|force-reload}" >&2
+    exit 1
+    ;;
+esac
+
+exit 0
