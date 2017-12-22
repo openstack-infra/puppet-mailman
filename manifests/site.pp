@@ -69,6 +69,10 @@ define mailman::site ($default_email_host, $default_url_host)
     line    => "${default_email_host}: /srv/mailman/${name}",
   }
 
+  # We alias the resource name here so that it can resolve properly
+  # within the vhost template when evaluated as part of the vhost
+  # define (which will override $name).
+  $mailman_site_name = $name
   ::httpd::vhost { $default_url_host:
     port     => 80,
     docroot  => '/var/www/',

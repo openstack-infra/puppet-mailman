@@ -34,7 +34,7 @@ Alias /images/mailman/ /usr/share/images/mailman/
     AllowOverride None
     Options ExecCGI
     AddHandler cgi-script .cgi
-    SetEnv MAILMAN_SITE_DIR /srv/mailman/<%= @name %>
+    SetEnv MAILMAN_SITE_DIR /srv/mailman/<%= @mailman_site_name %>
     Order allow,deny
     Allow from all
     <IfVersion >= 2.4>
