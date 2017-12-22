@@ -21,7 +21,7 @@
 
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 DAEMON=/usr/lib/mailman/bin/mailmanctl
-MAILMAN_SITE_DIR=/srv/mailman/<%= @name %>
+export MAILMAN_SITE_DIR=/srv/mailman/<%= @name %>
 PIDFILE=$MAILMAN_SITE_DIR/run/mailman.pid
 
 
