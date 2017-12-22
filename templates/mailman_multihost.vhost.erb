@@ -17,7 +17,7 @@ RewriteRule ^/$ /cgi-bin/mailman/listinfo [R]
 # We can find mailman here:
 ScriptAlias /cgi-bin/mailman/ /usr/lib/cgi-bin/mailman/
 # And the public archives:
-Alias /pipermail/ /var/lib/mailman/archives/public/
+Alias /pipermail/ /srv/mailman/<%= @mailman_site_name %>/archives/public/
 # Logos:
 Alias /images/mailman/ /usr/share/images/mailman/
 
@@ -41,7 +41,7 @@ Alias /images/mailman/ /usr/share/images/mailman/
         Require all granted
     </IfVersion>
 </Directory>
-<Directory /var/lib/mailman/archives/public/>
+<Directory /srv/mailman/<%= @mailman_site_name %>/archives/public/>
     Options FollowSymlinks
     AllowOverride None
     Order allow,deny
