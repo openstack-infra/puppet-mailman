@@ -13,7 +13,27 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-define mailman::site ($default_email_host, $default_url_host)
+# This processes the passed in directory (which should be like
+# "/srv/mailman/something/templates/en") to identify the language and
+# creates a symlink to the target installed templates for that
+# language.
+
+define mailman::language_link()
+{
+  $parts = split($name, '/')
+  $lname = $parts[-1]
+  $target = sprintf('/usr/share/mailman/%s', $lname)
+
+  file { $name:
+    ensure => link,
+    target => $target,
+  }
+}
+
+define mailman::site (
+  $default_email_host,
+  $default_url_host,
+  $install_languages = ['en'])
 {
   include ::httpd
 
@@ -31,6 +51,7 @@ define mailman::site ($default_email_host, $default_url_host)
     "${root}/archives",
     "${root}/archives/public",
     "${root}/archives/private",
+    "${root}/templates",
     "${root}/qfiles",
     "${root}/qfiles/in",
     "${root}/qfiles/out",
@@ -51,6 +72,10 @@ define mailman::site ($default_email_host, $default_url_host)
     group  => 'list',
     mode   => '2775',
   }
+
+  $install_template_dirs = regsubst ($install_languages, '^(.*)$', "${root}/templates/\\1")
+
+  mailman::language_link { $install_template_dirs: }
 
   file { "/srv/mailman/${name}/etc/mm_cfg_local.py":
     ensure  => present,
