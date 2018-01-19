@@ -56,16 +56,6 @@ class mailman(
     before => Service['httpd'],
   }
 
-  file { '/etc/mailman/en':
-    ensure  => directory,
-    owner   => 'root',
-    group   => 'list',
-    mode    => '0644',
-    recurse => true,
-    require => Package['mailman'],
-    source  => 'puppet:///modules/mailman/html-templates-en',
-  }
-
   file { '/var/www/index.html':
     ensure  => present,
     source  => 'puppet:///modules/mailman/index.html',
