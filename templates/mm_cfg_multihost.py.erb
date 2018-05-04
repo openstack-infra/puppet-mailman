@@ -1,6 +1,11 @@
 import os
 import sys
 
+if 'MAILMAN_SITE_DIR' not in os.environ:
+  print("Please set MAILMAN_SITE_DIR")
+  # Exit 0 to avoid confusing the dpkg scripts
+  sys.exit(0)
+
 sys.path.insert(0, os.path.join(os.environ['MAILMAN_SITE_DIR'], 'etc'))
 from mm_cfg_local import *
 
