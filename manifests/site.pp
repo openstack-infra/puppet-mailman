@@ -102,7 +102,7 @@ define mailman::site (
     port     => 80,
     docroot  => '/var/www/',
     priority => '50',
-    template => 'mailman/mailman_multihost.vhost.erb',
+    content  => template('mailman/mailman_multihost.vhost.erb'),
   }
 
   file { "/etc/init.d/mailman-${name}":
