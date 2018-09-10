@@ -90,4 +90,8 @@ EOF
   describe file('/etc/apache2/sites-enabled/50-lists.openstack.org.conf') do
     its(:content) { should eq expected_vhost }
   end
+
+  describe command('MAILMAN_SITE_DIR=/srv/mailman/openstack /usr/lib/mailman/bin/list_lists --bare') do
+    its(:stdout) { should eq "kata-dev\n" }
+  end
 end
