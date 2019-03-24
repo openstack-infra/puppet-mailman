@@ -1,6 +1,6 @@
 vcsrepo { '/opt/system-config':
   ensure => present,
-  source => 'git://git.openstack.org/openstack-infra/system-config',
+  source => 'https://git.openstack.org/openstack-infra/system-config',
   provider => git,
 }
 file { '/srv/mailman/openstack/templates/en':
