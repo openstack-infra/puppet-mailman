@@ -1,3 +1,3 @@
-# OpenStack Mailman Module
+# This repo has moved to OpenDev
 
-This module installs and configures Mailman
+It can now be found at [https://opendev.org/opendev/puppet-mailman](https://opendev.org/opendev/puppet-mailman)
